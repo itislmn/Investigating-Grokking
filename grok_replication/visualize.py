@@ -19,8 +19,8 @@ def plot_grokking(train_accuracies, val_accuracies):
     plt.figure(figsize=(10, 6))
 
     # Plot both training and validation accuracy
-    plt.plot(epochs, train_accuracies, label="Training Accuracy", color='blue', linestyle='-')
-    plt.plot(epochs, val_accuracies, label="Validation Accuracy", color='orange', linestyle='-')
+    plt.plot(epochs, train_accuracies, label="Training Accuracy", color='blue', linestyle='.')
+    plt.plot(epochs, val_accuracies, label="Validation Accuracy", color='orange', linestyle='.')
 
     # Labeling the plot
     plt.xlabel('Iterations')

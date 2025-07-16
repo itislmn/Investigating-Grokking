@@ -1,7 +1,7 @@
 import random
 import torch
 
-N = 32  # Domain size
+N = 64  # Domain size
 
 # Define operations
 def op_mod_xor(a, b):
