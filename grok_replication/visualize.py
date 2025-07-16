@@ -19,7 +19,7 @@ def plot_grokking(train_accuracies, val_accuracies):
     plt.figure(figsize=(10, 6))
 
     # Plot both training and validation accuracy
-    plt.plot(epochs, train_accuracies, label="Training Accuracy", color='red', linewidth = 3, solid_capstyle = 'round')
+    plt.plot(epochs, train_accuracies, label="Training Accuracy", color='blue', linewidth = 3, solid_capstyle = 'round')
     plt.plot(epochs, val_accuracies, label="Validation Accuracy", color='green', linewidth = 3, solid_capstyle ='round')
 
     # Labeling the plot
@@ -43,15 +43,13 @@ def plot_grokking(train_accuracies, val_accuracies):
         jump = val_accuracies[i] - val_accuracies[i - 1]
         if jump >= jump_threshold:
             grokking_epoch = i
+            plt.axvline(x=grokking_epoch, color='yellow', linestyle=':', label=f'Grokking Point (Epoch {grokking_epoch})')
             break
+
 
     if grokking_epoch is None:
         grokking_epoch = len(val_accuracies)  # fallback to end
-        plt.plot([], [], label='No Grokking Point', color='yellow', linestyle=':')
-
-    if grokking_epoch is not None:
-        plt.axvline(x=grokking_epoch, color='yellow', linestyle=':', label=f'Grokking Point (Epoch {grokking_epoch})')
-
+        plt.plot(x=grokking_epoch, label='No Grokking Point', color='black', linestyle=':', linewidth=3, solid_capstyle = 'round')
 
 
     # Show the legend
