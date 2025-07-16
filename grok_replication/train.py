@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 # Step 1: Create a custom dataset class
 class XORDataset(Dataset):
-    def __init__(self, name, num_samples=100):
+    def __init__(self, name, num_samples=1000):
         if name == "mixed":
             self.X, self.y = generate_mixed_dataset(num_samples)
         elif name in dataset_registry:
@@ -63,7 +63,7 @@ optimizer = optim.AdamW(model.parameters(), lr=0.001, weight_decay=1)
 scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda epoch: 1.0 if epoch < 5 else 0.95)
 
 # Step 5: Training loop
-num_epochs = 450
+num_epochs = 10000
 train_accuracies = []
 val_accuracies = []
 
