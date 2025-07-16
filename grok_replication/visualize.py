@@ -48,14 +48,12 @@ def plot_grokking(train_accuracies, val_accuracies):
 
 
     if grokking_epoch is None:
-        grokking_epoch = len(val_accuracies)  # fallback to end
-        plt.plot(x=grokking_epoch, label='No Grokking Point', color='black', linestyle=':', linewidth=3, solid_capstyle = 'round')
+        grokking_epoch = len(val_accuracies) # fallback to end
+        plt.plot(grokking_epoch, label='No Grokking Point', color='black', linestyle=':', linewidth=3)
 
 
     # Show the legend
     plt.legend()
-
-    plt.grid()
 
     # Display or save the plot
     plt.savefig('Plots/grokking_xor.png')
