@@ -52,7 +52,8 @@ def plot_grokking(train_accuracies, val_accuracies, title="Grokking Phenomena: M
             break
 
     if grokking_epoch is None:
-        plt.axvline(x=len(val_smooth), color='black', linestyle=':', linewidth=2, label='No Grokking')
+        grokking_epoch = len(val_accuracies)  # fallback to end
+        plt.plot(grokking_epoch, label='No Grokking', color='black', linestyle=':', linewidth=3)
 
     plt.legend()
 
