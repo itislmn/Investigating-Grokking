@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader, random_split
-from baseline_model import *
+from simple_model import *
 from data import *
 from visualize import plot_grokking  # Import the plot function
 

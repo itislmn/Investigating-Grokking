@@ -15,26 +15,21 @@ def plot_grokking(train_accuracies, val_accuracies):
     """
     epochs = range(1, len(train_accuracies) + 1)
 
-    # Create a figure and axis for plotting
     plt.figure(figsize=(10, 6))
 
     # Plot both training and validation accuracy
     plt.plot(epochs, train_accuracies, label="Training Accuracy", color='blue', linewidth = 1, solid_capstyle = 'round')
     plt.plot(epochs, val_accuracies, label="Validation Accuracy", color='green', linewidth = 1, solid_capstyle ='round')
 
-    # Labeling the plot and limiting
     plt.title("Grokking Phenomena: Modular XOR (50% data split)")
     plt.xlabel('Iterations')
     plt.ylabel('Accuracy (%)')
     plt.ylim(0, 105)
 
-    # Customize x-axis to show ticks at 10^x steps
     ax = plt.gca()
     ax.set_xscale('log')  # Use logarithmic scale for x-axis
 
-    # Find the grokking point dynamically:
-    stability_window = 10  # Number of epochs to consider as "stable"
-    threshold = 0.05  # Percentage increase considered significant for grokking
+    # Search for grokking point:
 
     stability_window = 10  # or whatever number of epochs to ignore at start
     jump_threshold = 5.0  # percentage points increase to consider as grokking
@@ -53,13 +48,9 @@ def plot_grokking(train_accuracies, val_accuracies):
         grokking_epoch = len(val_accuracies) # fallback to end
         plt.plot(grokking_epoch, label='No Grokking', color='black', linestyle=':', linewidth=3)
 
-
-    # Show the legend
     plt.legend()
 
-    # Display or save the plot
     plt.savefig('Plots/grokking_xor.png')
     plt.show()
 
-    # Close the plot to avoid memory issues during training
     plt.close()
