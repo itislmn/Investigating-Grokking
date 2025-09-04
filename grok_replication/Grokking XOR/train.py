@@ -1,6 +1,4 @@
 import argparse
-import torch
-import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader, random_split
 from simple_model import *
