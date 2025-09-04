@@ -19,12 +19,14 @@ def plot_grokking(train_accuracies, val_accuracies):
     plt.figure(figsize=(10, 6))
 
     # Plot both training and validation accuracy
-    plt.plot(epochs, train_accuracies, label="Training Accuracy", color='blue', linewidth = 3, solid_capstyle = 'round')
-    plt.plot(epochs, val_accuracies, label="Validation Accuracy", color='green', linewidth = 3, solid_capstyle ='round')
+    plt.plot(epochs, train_accuracies, label="Training Accuracy", color='blue', linewidth = 1, solid_capstyle = 'round')
+    plt.plot(epochs, val_accuracies, label="Validation Accuracy", color='green', linewidth = 1, solid_capstyle ='round')
 
-    # Labeling the plot
+    # Labeling the plot and limiting
+    plt.title("Grokking Phenomena: Modular XOR (50% data split)")
     plt.xlabel('Iterations')
     plt.ylabel('Accuracy (%)')
+    plt.ylim(0, 105)
 
     # Customize x-axis to show ticks at 10^x steps
     ax = plt.gca()
@@ -49,7 +51,7 @@ def plot_grokking(train_accuracies, val_accuracies):
 
     if grokking_epoch is None:
         grokking_epoch = len(val_accuracies) # fallback to end
-        plt.plot(grokking_epoch, label='No Grokking Point', color='black', linestyle=':', linewidth=3)
+        plt.plot(grokking_epoch, label='No Grokking', color='black', linestyle=':', linewidth=3)
 
 
     # Show the legend

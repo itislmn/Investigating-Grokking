@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 # Step 1: Create a custom dataset class
 class XORDataset(Dataset):
-    def __init__(self, name, num_samples=1000):
+    def __init__(self, name, num_samples=256):
         if name == "mixed":
             self.X, self.y = generate_mixed_dataset(num_samples)
         elif name in dataset_registry:
@@ -49,17 +49,17 @@ num_classes = N
 model = TransformerClassifier(
     vocab_size=vocab_size,
     num_classes=num_classes,
-    d_model=256,
-    nhead=8,
-    num_layers=4,
-    dim_feedforward=512,
-    dropout=0.1,
+    d_model=64,
+    nhead=4,
+    num_layers=2,
+    dim_feedforward=128,
+    dropout=0.2,
     max_len=2
 ).to(device)
 
 # Step 4: Loss, optimizer, scheduler
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.AdamW(model.parameters(), lr=0.0001, weight_decay=1)
+optimizer = optim.AdamW(model.parameters(), lr=1.5e-4, weight_decay=0.025)
 scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda epoch: 1.0 if epoch < 25 else 0.95)
 
 # Step 5: Training loop
