@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class SmallTransformer(nn.Module):
-    def __init__(self, vocab_size=113, d_model=64, nhead=2, num_layers=2):
+    def __init__(self, vocab_size=113, d_model=128, nhead=4, num_layers=2):
         super().__init__()
         self.embedding = nn.Embedding(vocab_size, d_model)
 

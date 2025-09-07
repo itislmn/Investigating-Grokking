@@ -61,7 +61,7 @@ optimizer = optim.AdamW(model.parameters(), lr=1.5e-4, weight_decay=0.025)
 scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda epoch: 1.0 if epoch < 25 else 0.95)
 
 # Step 5: Training loop
-num_epochs = 10**6
+num_epochs = 10
 train_accuracies = []
 val_accuracies = []
 

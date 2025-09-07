@@ -14,23 +14,25 @@ def accuracy(logits, y):
 train_dataset = ModularAdditionDataset(p=113, split="train", train_frac=0.5)
 val_dataset   = ModularAdditionDataset(p=113, split="val", train_frac=0.5)
 
-train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-val_loader   = DataLoader(val_dataset, batch_size=64)
+train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
+val_loader   = DataLoader(val_dataset, batch_size=128)
 
 # --- Model, optimizer, loss ---
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = SmallTransformer(vocab_size=113).to(device)
 
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+optimizer = torch.optim.AdamW(model.parameters(), lr=7e-4, weight_decay=0.5e-5)
 criterion = nn.NLLLoss()   # since model outputs log-softmax
 
 # --- Training loop ---
 train_acc_hist, val_acc_hist = [], []
 
-max_steps = 100_000
-log_interval = 100
+max_steps = 100000
+log_interval = 10
+switch_step = 24000
+scheduler = None
 
-for step in range(max_steps):
+for step in range(max_steps+1):
     model.train()
     x, y = next(iter(train_loader))
     x, y = x.to(device), y.to(device)
@@ -40,6 +42,8 @@ for step in range(max_steps):
     loss = criterion(out, y)
     loss.backward()
     optimizer.step()
+    if scheduler is not None:
+        scheduler.step()
 
     if step % log_interval == 0:
         # Training accuracy
@@ -61,6 +65,12 @@ for step in range(max_steps):
         val_acc_hist.append(val_acc)
 
         print(f"Step {step}: Train {train_acc:.2f}% | Val {val_acc:.2f}%")
+    if step == switch_step:
+        for g in optimizer.param_groups:
+            g['weight_decay'] = 0.5e-5
+        for l in optimizer.param_groups:
+            l['lr'] = 7e-4
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = max_steps - switch_step)
 
 # --- Plot grokking ---
-plot_grokking(train_acc_hist, val_acc_hist)
+plot_grokking(train_acc_hist, val_acc_hist, log_interval, max_steps)
