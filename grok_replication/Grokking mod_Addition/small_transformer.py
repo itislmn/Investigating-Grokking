@@ -26,3 +26,4 @@ class SmallTransformer(nn.Module):
         h = h.mean(dim=1)                           # Pool over sequence
         logits = self.fc(h)                         # (B, vocab_size)
         return F.log_softmax(logits, dim=-1)        # log-softmax for stability
+        #return 
