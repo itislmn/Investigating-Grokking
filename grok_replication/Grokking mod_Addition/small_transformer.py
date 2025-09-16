@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from sparsemax import Sparsemax
 
 class SmallTransformer(nn.Module):
     def __init__(self, vocab_size=113, d_model=128, nhead=4, num_layers=2):
@@ -19,11 +20,15 @@ class SmallTransformer(nn.Module):
         # Final classifier
         self.fc = nn.Linear(d_model, vocab_size)
 
+        self.log_softmax = nn.LogSoftmax(dim=-1)
+        self.sparsemax = Sparsemax(dim=-1)
+
     def forward(self, x):
         # x: (batch_size, seq_len=2)
-        emb = self.embedding(x)                      # (B, 2, d_model)
-        h = self.transformer(emb)                   # (B, 2, d_model)
-        h = h.mean(dim=1)                           # Pool over sequence
-        logits = self.fc(h)                         # (B, vocab_size)
-        return F.log_softmax(logits, dim=-1)        # log-softmax for stability
-        #return 
+        emb = self.embedding(x)
+        h = self.transformer(emb)
+        h = h.mean(dim=1)
+        logits = self.fc(h)
+        return self.log_softmax(logits)        # log-softmax
+        #return self.sparsemax(logits)         # sparsemax
+
