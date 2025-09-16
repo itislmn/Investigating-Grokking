@@ -22,7 +22,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = SmallTransformer(vocab_size=113).to(device)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=7e-4, weight_decay=0.5e-5)
-criterion = nn.NLLLoss()   # since model outputs log-softmax
+criterion = nn.NLLLoss()   # if model outputs log-softmax, log-stablemax
+#criterion = nn.MSELoss()  # if model outputs sparse-softmax
+#criterion = nn.KLDivLoss(reduction='batchmean') # if model outputs stablemax
 
 # --- Training loop ---
 train_acc_hist, val_acc_hist = [], []
