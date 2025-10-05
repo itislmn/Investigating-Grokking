@@ -21,7 +21,7 @@ val_loader   = DataLoader(val_dataset, batch_size=128)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = SmallTransformer(vocab_size=113).to(device)
 
-optimizer = torch.optim.AdamW(model.parameters(), lr=7e-4, weight_decay=0.5e-5)
+optimizer = torch.optim.AdamW(model.parameters(), lr=7e-4, weight_decay=0)
 criterion = nn.NLLLoss()   # if model outputs log-softmax, log-stablemax
 #criterion = nn.MSELoss()  # if model outputs sparse-softmax
 #criterion = nn.KLDivLoss(reduction='batchmean') # if model outputs stablemax
@@ -69,9 +69,9 @@ for step in range(max_steps+1):
         print(f"Step {step}: Train {train_acc:.2f}% | Val {val_acc:.2f}%")
     if step == switch_step:
         for g in optimizer.param_groups:
-            g['weight_decay'] = 0.5e-5
+            g['weight_decay'] = 1e-4
         for l in optimizer.param_groups:
-            l['lr'] = 7e-4
+            l['lr'] = 2e-3
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = max_steps - switch_step)
 
 # --- Plot grokking ---

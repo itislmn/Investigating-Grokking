@@ -22,9 +22,9 @@ class SmallTransformer(nn.Module):
         self.fc = nn.Linear(d_model, vocab_size)
 
         self.log_softmax = nn.LogSoftmax(dim=-1)
-        self.sparsemax = Sparsemax(dim=-1)
-        self.stablemax = stablemax(dim=-1)
-        self.log_stablemax = log_stablemax(dim=-1)
+        #self.sparsemax = Sparsemax(dim=-1)
+        #self.stablemax = lambda x: stablemax(x, dim=-1)
+        #self.log_stablemax = lambda x: log_stablemax(x, dim=-1)
 
     def forward(self, x):
         # x: (batch_size, seq_len=2)
