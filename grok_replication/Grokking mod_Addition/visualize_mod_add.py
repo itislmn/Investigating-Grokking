@@ -60,6 +60,6 @@ def plot_grokking(train_accuracies, val_accuracies, log_interval=100, steps = 10
 
     plt.legend()
 
-    plt.savefig('Plots/grokking_mod_add.png')
+    plt.savefig('Plots/grokking_mod_add_switch_step.png')
     plt.show()
     plt.close()

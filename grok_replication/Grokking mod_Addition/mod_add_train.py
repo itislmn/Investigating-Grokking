@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 from mod_add_data import ModularAdditionDataset
 from small_transformer import SmallTransformer
 from visualize_mod_add import plot_grokking
+from visualisation_params import plot_training_dynamics
 
 # --- Accuracy helper ---
 def accuracy(logits, y):
@@ -28,6 +29,7 @@ criterion = nn.NLLLoss()   # if model outputs log-softmax, log-stablemax
 
 # --- Training loop ---
 train_acc_hist, val_acc_hist = [], []
+loss_hist, grad_hist, wd_hist = [], [], []
 
 max_steps = 100000
 log_interval = 10
@@ -43,11 +45,24 @@ for step in range(max_steps+1):
     out = model(x)
     loss = criterion(out, y)
     loss.backward()
+
+    grad_norm = 0.0
+    for p in model.parameters():
+        if p.grad is not None:
+            grad_norm += p.grad.norm().item() ** 2
+    grad_norm = grad_norm ** 0.5
+
     optimizer.step()
     if scheduler is not None:
         scheduler.step()
 
     if step % log_interval == 0:
+
+        #metrics
+        loss_hist.append(loss.item())
+        grad_hist.append(grad_norm)
+        wd_hist.append(optimizer.param_groups[0]["weight_decay"])
+
         # Training accuracy
         train_acc = accuracy(out, y) * 100
         train_acc_hist.append(train_acc)
@@ -76,3 +91,4 @@ for step in range(max_steps+1):
 
 # --- Plot grokking ---
 plot_grokking(train_acc_hist, val_acc_hist, log_interval, max_steps)
+plot_training_dynamics(loss_hist, grad_hist, wd_hist, log_interval, switch_step)
